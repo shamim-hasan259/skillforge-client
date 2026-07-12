@@ -14,8 +14,8 @@ const HomePage = () => {
       <FeaturedCourses />
       <CategoriesSection />
       <LearningRoadmap />
-      <PlatformFeatures />
-      <Footer />
+      {/* <PlatformFeatures /> */}
+      {/* <Footer /> */}
     </>
   );
 };

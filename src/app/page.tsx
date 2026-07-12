@@ -14,7 +14,7 @@ const HomePage = () => {
       <FeaturedCourses />
       <CategoriesSection />
       <LearningRoadmap />
-      {/* <PlatformFeatures /> */}
+      <PlatformFeatures />
       {/* <Footer /> */}
     </>
   );

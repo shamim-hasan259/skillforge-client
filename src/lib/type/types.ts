@@ -38,3 +38,35 @@ export interface User {
   image: string | null;
   createdAt?: Date | null;
 }
+export type Category = {
+  id: number;
+  title: string;
+  description: string;
+  totalCourses: number;
+  icon: IconType;
+};
+
+export type RoadmapStep = {
+  id: number;
+  title: string;
+  description: string;
+  icon: IconType;
+};
+
+export type PlatformFeature = {
+  id: number;
+  title: string;
+  description: string;
+  icon: IconType;
+};
+export type FooterLink = {
+  id: number;
+  label: string;
+  href: string;
+};
+
+export type SocialLink = {
+  id: number;
+  href: string;
+  icon: IconType;
+};

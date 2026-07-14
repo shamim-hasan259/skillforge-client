@@ -24,7 +24,7 @@ export interface RegisterFormData {
   email: string;
   password: string;
   confirmPassword: string;
-  image: string;
+  image?: string | null;
 }
 export interface LoginFormData {
   email: string;
@@ -34,9 +34,9 @@ export interface User {
   id: string;
   email: string;
   emailVerified: boolean;
-  name: string | null;
+  name: string;
   image: string | null;
-  createdAt?: Date | null;
+  createdAt?: Date;
 }
 export type Category = {
   id: number;

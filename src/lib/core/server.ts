@@ -21,3 +21,18 @@ export const serverMutuations = async (
     throw error;
   }
 };
+
+export interface GetCoursesParams {
+  category?: string;
+  search?: string;
+}
+
+export const serverFetch = async <T>(path: string): Promise<T> => {
+  const res = await fetch(`${baseUrl}${path}`, {
+    cache: "no-store",
+  });
+
+  const data = await res.json();
+  console.log(data);
+  return data;
+};

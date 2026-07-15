@@ -10,6 +10,7 @@ import {
   FaClock,
   FaUserGraduate,
   FaLayerGroup,
+  FaTags, // Added icon for category
 } from "react-icons/fa";
 
 interface CourseCreateFormProps {
@@ -20,6 +21,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [level, setLevel] = useState("Beginner");
+  const [category, setCategory] = useState("Web Development"); // Added Category State
   const [duration, setDuration] = useState("");
   const [students, setStudents] = useState("");
   const [image, setImage] = useState<File | null>(null);
@@ -43,10 +45,17 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
     e.preventDefault();
     setMessage({ type: "", text: "" });
 
-    if (!title || !description || !duration || !students || !image) {
+    if (
+      !title ||
+      !description ||
+      !duration ||
+      !students ||
+      !image ||
+      !category
+    ) {
       setMessage({
         type: "error",
-        text: "All fields including the course image are required!",
+        text: "All fields including the course image and category are required!",
       });
       return;
     }
@@ -82,10 +91,11 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
 
       const uploadedImageUrl = imgBbData.data.url;
 
-      const courseData: CreteateCourseFormData = {
+      const courseData: CreteateCourseFormData & { category: string } = {
         title,
         description,
         level,
+        category, // Included Category in courseData object
         duration,
         students,
         image: uploadedImageUrl,
@@ -106,6 +116,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
       setTitle("");
       setDescription("");
       setLevel("Beginner");
+      setCategory("Web Development"); // Reset to default category
       setDuration("");
       setStudents("");
       setImage(null);
@@ -178,7 +189,8 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* Updated grid from 3 columns to 4 columns to fit Category beautifully */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5">
               <FaLayerGroup className="text-gray-400" /> Level
@@ -191,6 +203,23 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
               <option value="Beginner">Beginner</option>
               <option value="Intermediate">Intermediate</option>
               <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+
+          {/* New Category Dropdown Field */}
+          <div>
+            <label className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5">
+              <FaTags className="text-gray-400" /> Category
+            </label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
+            >
+              <option value="Web Development">Web Development</option>
+              <option value="App Development">App Development</option>
+              <option value="UI/UX Design">UI/UX Design</option>
+              <option value="Digital Marketing">Digital Marketing</option>
             </select>
           </div>
 

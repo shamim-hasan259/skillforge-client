@@ -1,38 +1,12 @@
+import { getCourses } from "@/lib/api/course";
 import { Course } from "@/lib/type/types";
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight, FaClock, FaSignal, FaUsers } from "react-icons/fa";
 
-const courses: Course[] = [
-  {
-    title: "Complete React.js",
-    description:
-      "Learn modern React by building real-world projects from scratch.",
-    image: "/images/react.jpg",
-    level: "Beginner",
-    duration: "8 Weeks",
-    students: "4.2K",
-  },
-  {
-    title: "TypeScript Mastery",
-    description: "Write scalable and type-safe applications using TypeScript.",
-    image: "/images/typescript.jpg",
-    level: "Intermediate",
-    duration: "6 Weeks",
-    students: "3.1K",
-  },
-  {
-    title: "Next.js Full Stack",
-    description:
-      "Build production-ready full-stack applications using Next.js.",
-    image: "/images/nextjs.jpg",
-    level: "Intermediate",
-    duration: "10 Weeks",
-    students: "2.5K",
-  },
-];
+export default async function FeaturedCourses() {
+  const { data: courses } = await getCourses();
 
-export default function FeaturedCourses() {
   return (
     <section className="bg-slate-50 py-24 transition-colors duration-300 dark:bg-slate-950">
       <div className="mx-auto max-w-7xl px-5">
@@ -54,9 +28,9 @@ export default function FeaturedCourses() {
 
         {/* Courses Grid */}
         <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
-          {courses.map((course) => (
+          {courses.map((course: Course) => (
             <article
-              key={course.title}
+              key={course?._id}
               className="group overflow-hidden rounded-3xl bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl dark:bg-slate-900 dark:shadow-black/20 dark:hover:shadow-2xl dark:hover:shadow-indigo-500/5"
             >
               {/* Image Container */}
@@ -103,7 +77,7 @@ export default function FeaturedCourses() {
 
                 {/* Single Course Link */}
                 <Link
-                  href={`/courses/${course.title.replace(/\s+/g, "-").toLowerCase()}`}
+                  href={`/courses/${course._id}`}
                   className="mt-8 inline-flex items-center gap-2 font-semibold text-indigo-600 transition hover:gap-3 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                   View Course

@@ -5,6 +5,7 @@ import { Merienda } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { Toaster } from "react-hot-toast";
+import Footer from "@/components/FooterLink";
 
 const merianda = Merienda({
   subsets: ["latin"],
@@ -29,6 +30,9 @@ export default function RootLayout({
           {children}
           <Toaster />
         </main>
+        <footer>
+          <Footer />
+        </footer>
       </body>
     </html>
   );

@@ -18,6 +18,7 @@ export interface CreteateCourseFormData {
   level: string;
   duration: string;
   students: string;
+  category: string;
 }
 export type UpdateCourseFormData = {
   title?: string;
@@ -25,9 +26,10 @@ export type UpdateCourseFormData = {
   image?: string;
   level?: string;
   price?: number;
+  category?: string;
 };
 export type Course = {
-  id?: ObjectId;
+  _id?: string;
   userId?: string;
   title: string;
   description: string;
@@ -35,6 +37,7 @@ export type Course = {
   level: string;
   duration: string;
   students: string;
+  category: string;
 };
 
 export interface RegisterFormData {
@@ -78,6 +81,17 @@ export type PlatformFeature = {
   description: string;
   icon: IconType;
 };
+export interface GetCoursesResponse {
+  success: boolean;
+  message: string;
+  data: Course[];
+}
+
+export interface GetCoursesParams {
+  category?: string;
+  search?: string;
+}
+
 export type FooterLink = {
   id: number;
   label: string;

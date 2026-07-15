@@ -11,8 +11,13 @@ import {
   FaTimes,
   FaGraduationCap,
 } from "react-icons/fa";
+import { User } from "@/lib/type/types";
+import Image from "next/image";
 
-const Sidebar = () => {
+interface userProps {
+  user: User | null;
+}
+const Sidebar = ({ user }: userProps) => {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -110,15 +115,19 @@ const Sidebar = () => {
         </div>
 
         <div className="p-2 border-t border-gray-100 dark:border-slate-800 flex items-center gap-3">
-          <div className="w-9 h-9 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-sm">
-            JD
-          </div>
+          <Image
+            src={user?.image as string}
+            alt={user?.name as string}
+            height={30}
+            width={30}
+            className="rounded-full"
+          />
           <div className="overflow-hidden">
             <p className="text-sm font-bold text-gray-800 dark:text-slate-200 truncate">
-              John Doe
+              {user?.name}
             </p>
             <p className="text-xs text-gray-400 dark:text-slate-500 truncate">
-              john@example.com
+              {user?.email}
             </p>
           </div>
         </div>

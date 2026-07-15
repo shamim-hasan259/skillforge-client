@@ -1,10 +1,12 @@
 import Sidebar from "@/components/Sidebar";
+import { getUserSession } from "@/lib/user/user";
 
-const layout = ({ children }: { children: React.ReactNode }) => {
+const layout = async ({ children }: { children: React.ReactNode }) => {
+  const user = await getUserSession();
   return (
-    <div className="grid grid-cols-12 gap-8 mt-4 ">
+    <div className="grid grid-cols-12 gap-8 py-8 ">
       <div className="col-span-12 md:col-span-3 lg:col-span-2">
-        <Sidebar />
+        <Sidebar user={user} />
       </div>
       <main className="col-span-12 md:col-span-9 lg:col-span-10">
         {children}

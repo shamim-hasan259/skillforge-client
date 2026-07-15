@@ -26,8 +26,8 @@ export type UpdateCourseFormData = {
   image?: string;
   level?: string;
   price?: number;
-  duration: string;
-  students: string;
+  duration?: string;
+  students?: string;
   category?: string;
 };
 export type Course = {
@@ -87,6 +87,11 @@ export interface GetCoursesResponse {
   success: boolean;
   message: string;
   data: Course[];
+}
+export interface GetSingleCourseResponse {
+  success: boolean;
+  message: string;
+  data: Course;
 }
 
 export interface GetCoursesParams {

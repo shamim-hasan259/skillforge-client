@@ -19,7 +19,8 @@ const CourseDetailsPage = async ({ params }: PageProps) => {
   const resolvedParams = await params;
   const id = resolvedParams.id;
 
-  const course = await getSingleCourse(id);
+  const res = await getSingleCourse(id);
+  const course = res.data;
 
   if (!course) {
     return (

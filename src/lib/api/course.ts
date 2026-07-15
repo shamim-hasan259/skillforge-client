@@ -1,5 +1,10 @@
 import { serverFetch } from "../core/server";
-import { Course, GetCoursesParams, GetCoursesResponse } from "../type/types";
+import {
+  Course,
+  GetCoursesParams,
+  GetCoursesResponse,
+  GetSingleCourseResponse,
+} from "../type/types";
 
 export const getCourses = async ({
   category,
@@ -20,6 +25,8 @@ export const getCourses = async ({
   );
 };
 
-export const getSingleCourse = (id: string): Promise<Course> => {
-  return serverFetch<Course>(`/api/get/course/${id}`);
+export const getSingleCourse = (
+  id: string,
+): Promise<GetSingleCourseResponse> => {
+  return serverFetch<GetSingleCourseResponse>(`/api/get/course/${id}`);
 };

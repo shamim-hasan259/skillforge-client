@@ -1,6 +1,8 @@
 "use client";
+import { updateCourse } from "@/lib/action/action";
 import { Course, UpdateCourseFormData, User } from "@/lib/type/types";
 import React, { useState } from "react";
+import toast from "react-hot-toast";
 
 import {
   FaCloudUploadAlt,
@@ -11,20 +13,28 @@ import {
   FaTags,
 } from "react-icons/fa";
 
-interface CourseUpdaateFormProps {
+interface CourseUpdateFormProps {
   user: User | null;
   course: Course;
 }
 
-const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [level, setLevel] = useState("Beginner");
-  const [category, setCategory] = useState("Web Development");
-  const [duration, setDuration] = useState("");
-  const [students, setStudents] = useState("");
+const EditForm = ({ user, course }: CourseUpdateFormProps) => {
+  // ১. এডিট ফর্মের জন্য আগের ডেটা দিয়ে স্টেটগুলো ইনিশিয়ালাইজ করা হলো
+  const [title, setTitle] = useState(course?.title || "");
+  const [description, setDescription] = useState(course?.description || "");
+  const [level, setLevel] = useState(course?.level || "Beginner");
+  const [category, setCategory] = useState(
+    course?.category || "Web Development",
+  );
+  const [duration, setDuration] = useState(course?.duration || "");
+  const [students, setStudents] = useState(course?.students || "");
+
   const [image, setImage] = useState<File | null>(null);
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    course?.image || null,
+  );
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
@@ -49,8 +59,8 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
       !description ||
       !duration ||
       !students ||
-      !image ||
-      !category
+      !category ||
+      !imagePreview
     ) {
       setMessage({
         type: "error",
@@ -62,7 +72,7 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
     if (!user) {
       setMessage({
         type: "error",
-        text: "You must be logged in to create a course.",
+        text: "You must be logged in to update this course.",
       });
       return;
     }
@@ -70,55 +80,52 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
     try {
       setLoading(true);
 
-      const imgBbFormData = new FormData();
-      imgBbFormData.append("image", image);
+      let uploadedImageUrl = course.image;
 
-      const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMAGE_API;
+      if (image) {
+        const imgBbFormData = new FormData();
+        imgBbFormData.append("image", image);
 
-      const imgBbResponse = await fetch(
-        `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
-        {
-          method: "POST",
-          body: imgBbFormData,
-        },
-      );
-      const imgBbData = await imgBbResponse.json();
+        const IMGBB_API_KEY = process.env.NEXT_PUBLIC_IMAGE_API;
 
-      if (!imgBbData.success) {
-        throw new Error("Image upload to ImgBB failed.");
+        const imgBbResponse = await fetch(
+          `https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`,
+          {
+            method: "POST",
+            body: imgBbFormData,
+          },
+        );
+        const imgBbData = await imgBbResponse.json();
+
+        if (!imgBbData.success) {
+          throw new Error("Image upload to ImgBB failed.");
+        }
+
+        uploadedImageUrl = imgBbData.data.url;
       }
-
-      const uploadedImageUrl = imgBbData.data.url;
 
       const courseData: UpdateCourseFormData & { category: string } = {
         title,
         description,
         level,
-        category, // Included Category in courseData object
+        category,
         duration,
         students,
         image: uploadedImageUrl,
       };
 
-      // const response = await createCourse(courseData);
-      console.log("Course creation response:", courseData);
-      // if (response.status) {
-      //   toast.success(`${response.message}`);
-      // }
+      const res = await updateCourse(courseData, course._id as string);
+      console.log(res);
+
+      if (res.success) {
+        toast.success(`${res.message}`);
+      }
+      console.log("Course update payload:", courseData);
 
       setMessage({
         type: "success",
-        text: "Course published successfully with ImgBB image!",
+        text: "Course updated successfully!",
       });
-
-      setTitle("");
-      setDescription("");
-      setLevel("Beginner");
-      setCategory("Web Development"); // Reset to default category
-      setDuration("");
-      setStudents("");
-      setImage(null);
-      setImagePreview(null);
     } catch (err: Error | unknown) {
       setMessage({
         type: "error",
@@ -140,10 +147,10 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
         </div>
         <div>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
-            Create New Course
+            Edit Course
           </h2>
           <p className="text-xs text-gray-400 dark:text-slate-500">
-            Fill up the details to publish a new course
+            Modify the details below to update the course
           </p>
         </div>
       </div>
@@ -167,7 +174,7 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
           </label>
           <input
             type="text"
-            defaultValue={course?.title}
+            value={title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g., Complete React.js"
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
@@ -179,7 +186,7 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
             Description
           </label>
           <textarea
-            defaultValue={course?.description}
+            value={description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             placeholder="Learn modern React by building real-world projects..."
@@ -187,14 +194,13 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
           />
         </div>
 
-        {/* Updated grid from 3 columns to 4 columns to fit Category beautifully */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div>
             <label className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5">
               <FaLayerGroup className="text-gray-400" /> Level
             </label>
             <select
-              defaultValue={course?.level}
+              value={level}
               onChange={(e) => setLevel(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
             >
@@ -204,13 +210,12 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
             </select>
           </div>
 
-          {/* New Category Dropdown Field */}
           <div>
             <label className="flex items-center gap-1.5 text-sm font-semibold text-gray-700 dark:text-slate-300 mb-1.5">
               <FaTags className="text-gray-400" /> Category
             </label>
             <select
-              defaultValue={course?.category}
+              value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
             >
@@ -227,7 +232,7 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
             </label>
             <input
               type="text"
-              defaultValue={course?.duration}
+              value={duration}
               onChange={(e) => setDuration(e.target.value)}
               placeholder="e.g., 8 Weeks"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
@@ -240,7 +245,7 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
             </label>
             <input
               type="text"
-              defaultValue={course?.students}
+              value={students}
               onChange={(e) => setStudents(e.target.value)}
               placeholder="e.g., 4.2K"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
@@ -256,9 +261,8 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
             <label className="flex flex-col items-center justify-center w-full h-44 border-2 border-gray-200 border-dashed rounded-2xl cursor-pointer bg-gray-50/50 hover:bg-gray-50 dark:bg-slate-800/30 dark:border-slate-700 dark:hover:bg-slate-800/50 transition-colors">
               {imagePreview ? (
                 <div className="relative w-full h-full p-2">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={course.image}
+                    src={imagePreview}
                     alt="Preview"
                     className="w-full h-full object-cover rounded-xl"
                   />
@@ -289,6 +293,7 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
             </label>
           </div>
         </div>
+
         <button
           type="submit"
           disabled={loading}
@@ -316,10 +321,10 @@ const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
                   d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                 ></path>
               </svg>
-              <span>Publishing Course...</span>
+              <span>Updating Course...</span>
             </>
           ) : (
-            "Publish Course"
+            "Update Course"
           )}
         </button>
       </form>

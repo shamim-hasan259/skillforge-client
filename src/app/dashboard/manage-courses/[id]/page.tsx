@@ -13,8 +13,9 @@ const CourseEditPage = async ({ params }: PageProps) => {
   const resolvedParams = await params;
   const id = resolvedParams.id;
   const user = await getUserSession();
-  const { data: course } = await getSingleCourse(id);
-  console.log(course);
+  const response = await getSingleCourse(id);
+  const course = response.data;
+
   return (
     <div>
       <EditForm user={user} course={course} />

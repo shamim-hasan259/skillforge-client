@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { IconType } from "react-icons";
 
 export interface NavItem {
@@ -9,12 +10,29 @@ export type Technology = {
   name: string;
   icon: IconType;
 };
-export type Course = {
-  id: string;
+export interface CreteateCourseFormData {
+  userId: string;
   title: string;
   description: string;
   image: string;
-  level: "Beginner" | "Intermediate" | "Advanced";
+  level: string;
+  duration: string;
+  students: string;
+}
+export type UpdateCourseFormData = {
+  title?: string;
+  description?: string;
+  image?: string;
+  level?: string;
+  price?: number;
+};
+export type Course = {
+  id?: ObjectId;
+  userId?: string;
+  title: string;
+  description: string;
+  image: string;
+  level: string;
   duration: string;
   students: string;
 };
@@ -30,14 +48,15 @@ export interface LoginFormData {
   email: string;
   password: string;
 }
-export interface User {
+export type User = {
   id: string;
   email: string;
   emailVerified: boolean;
   name: string;
-  image: string | null;
+  image?: string | null;
   createdAt?: Date;
-}
+  updatedAt?: Date;
+};
 export type Category = {
   id: number;
   title: string;

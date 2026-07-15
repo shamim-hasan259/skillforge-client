@@ -5,7 +5,6 @@ import { FaArrowRight, FaClock, FaSignal, FaUsers } from "react-icons/fa";
 
 const courses: Course[] = [
   {
-    id: "1",
     title: "Complete React.js",
     description:
       "Learn modern React by building real-world projects from scratch.",
@@ -15,7 +14,6 @@ const courses: Course[] = [
     students: "4.2K",
   },
   {
-    id: "2",
     title: "TypeScript Mastery",
     description: "Write scalable and type-safe applications using TypeScript.",
     image: "/images/typescript.jpg",
@@ -24,7 +22,6 @@ const courses: Course[] = [
     students: "3.1K",
   },
   {
-    id: "3",
     title: "Next.js Full Stack",
     description:
       "Build production-ready full-stack applications using Next.js.",
@@ -59,7 +56,7 @@ export default function FeaturedCourses() {
         <div className="mt-16 grid gap-8 md:grid-cols-2 xl:grid-cols-3">
           {courses.map((course) => (
             <article
-              key={course.id}
+              key={course.title}
               className="group overflow-hidden rounded-3xl bg-white shadow-sm transition duration-300 hover:-translate-y-2 hover:shadow-xl dark:bg-slate-900 dark:shadow-black/20 dark:hover:shadow-2xl dark:hover:shadow-indigo-500/5"
             >
               {/* Image Container */}
@@ -106,7 +103,7 @@ export default function FeaturedCourses() {
 
                 {/* Single Course Link */}
                 <Link
-                  href={`/courses/${course.id}`}
+                  href={`/courses/${course.title.replace(/\s+/g, "-").toLowerCase()}`}
                   className="mt-8 inline-flex items-center gap-2 font-semibold text-indigo-600 transition hover:gap-3 dark:text-indigo-400 dark:hover:text-indigo-300"
                 >
                   View Course

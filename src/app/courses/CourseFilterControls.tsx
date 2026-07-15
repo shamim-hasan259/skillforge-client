@@ -25,7 +25,6 @@ const CourseFilterControls = ({
     "Digital Marketing",
   ];
 
-  // ইউআরএল আপডেট করার মূল লজিক
   const updateFilters = (selectedCat: string, searchText: string) => {
     const params = new URLSearchParams();
 

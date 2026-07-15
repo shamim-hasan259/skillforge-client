@@ -18,7 +18,6 @@ interface PageProps {
 }
 
 const CoursesPage = async ({ searchParams }: PageProps) => {
-  // Next.js-এর নিয়ম অনুযায়ী searchParams-কে await করে নিতে হবে
   const resolvedParams = await searchParams;
   const currentCategory = resolvedParams.category || "All";
   const currentSearch = resolvedParams.search || "";

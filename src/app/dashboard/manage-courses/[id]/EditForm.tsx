@@ -1,9 +1,7 @@
 "use client";
-
-import { createCourse } from "@/lib/action/action";
-import { CreteateCourseFormData, User } from "@/lib/type/types";
+import { Course, UpdateCourseFormData, User } from "@/lib/type/types";
 import React, { useState } from "react";
-import toast from "react-hot-toast";
+
 import {
   FaCloudUploadAlt,
   FaBookOpen,
@@ -13,11 +11,12 @@ import {
   FaTags,
 } from "react-icons/fa";
 
-interface CourseCreateFormProps {
+interface CourseUpdaateFormProps {
   user: User | null;
+  course: Course;
 }
 
-const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
+const EditForm = ({ user, course }: CourseUpdaateFormProps) => {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [level, setLevel] = useState("Beginner");
@@ -91,7 +90,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
 
       const uploadedImageUrl = imgBbData.data.url;
 
-      const courseData: CreteateCourseFormData & { category: string } = {
+      const courseData: UpdateCourseFormData & { category: string } = {
         title,
         description,
         level,
@@ -99,14 +98,13 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
         duration,
         students,
         image: uploadedImageUrl,
-        userId: user?.id,
       };
 
-      const response = await createCourse(courseData);
-      console.log("Course creation response:", response);
-      if (response.status) {
-        toast.success(`${response.message}`);
-      }
+      // const response = await createCourse(courseData);
+      console.log("Course creation response:", courseData);
+      // if (response.status) {
+      //   toast.success(`${response.message}`);
+      // }
 
       setMessage({
         type: "success",
@@ -169,7 +167,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
           </label>
           <input
             type="text"
-            value={title}
+            defaultValue={course?.title}
             onChange={(e) => setTitle(e.target.value)}
             placeholder="e.g., Complete React.js"
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
@@ -181,7 +179,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
             Description
           </label>
           <textarea
-            value={description}
+            defaultValue={course?.description}
             onChange={(e) => setDescription(e.target.value)}
             rows={3}
             placeholder="Learn modern React by building real-world projects..."
@@ -196,7 +194,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
               <FaLayerGroup className="text-gray-400" /> Level
             </label>
             <select
-              value={level}
+              defaultValue={course?.level}
               onChange={(e) => setLevel(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
             >
@@ -212,7 +210,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
               <FaTags className="text-gray-400" /> Category
             </label>
             <select
-              value={category}
+              defaultValue={course?.category}
               onChange={(e) => setCategory(e.target.value)}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
             >
@@ -229,7 +227,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
             </label>
             <input
               type="text"
-              value={duration}
+              defaultValue={course?.duration}
               onChange={(e) => setDuration(e.target.value)}
               placeholder="e.g., 8 Weeks"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
@@ -242,7 +240,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
             </label>
             <input
               type="text"
-              value={students}
+              defaultValue={course?.students}
               onChange={(e) => setStudents(e.target.value)}
               placeholder="e.g., 4.2K"
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-gray-50/50 text-gray-900 focus:outline-none focus:border-blue-500 dark:bg-slate-800/50 dark:border-slate-700 dark:text-white"
@@ -260,7 +258,7 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
                 <div className="relative w-full h-full p-2">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
-                    src={imagePreview}
+                    src={course.image}
                     alt="Preview"
                     className="w-full h-full object-cover rounded-xl"
                   />
@@ -291,7 +289,6 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
             </label>
           </div>
         </div>
-
         <button
           type="submit"
           disabled={loading}
@@ -330,4 +327,4 @@ const CourseCreateForm = ({ user }: CourseCreateFormProps) => {
   );
 };
 
-export default CourseCreateForm;
+export default EditForm;

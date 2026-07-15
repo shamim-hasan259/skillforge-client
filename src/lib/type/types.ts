@@ -26,6 +26,8 @@ export type UpdateCourseFormData = {
   image?: string;
   level?: string;
   price?: number;
+  duration: string;
+  students: string;
   category?: string;
 };
 export type Course = {

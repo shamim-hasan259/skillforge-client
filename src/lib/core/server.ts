@@ -36,3 +36,18 @@ export const serverFetch = async <T>(path: string): Promise<T> => {
   console.log(data);
   return data;
 };
+
+export const removeServer = async (path: string, method: string) => {
+  try {
+    const response = await fetch(`${baseUrl}${path}`, {
+      method: method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};

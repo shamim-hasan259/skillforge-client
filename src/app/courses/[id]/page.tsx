@@ -16,9 +16,7 @@ interface PageProps {
 }
 
 const CourseDetailsPage = async ({ params }: PageProps) => {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
-
+  const { id } = await params;
   const res = await getSingleCourse(id);
   const course = res.data;
 

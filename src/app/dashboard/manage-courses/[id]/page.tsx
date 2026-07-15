@@ -10,8 +10,8 @@ interface PageProps {
 }
 
 const CourseEditPage = async ({ params }: PageProps) => {
-  const resolvedParams = await params;
-  const id = resolvedParams.id;
+  const { id } = await params;
+
   const user = await getUserSession();
   const response = await getSingleCourse(id);
   const course = response.data;

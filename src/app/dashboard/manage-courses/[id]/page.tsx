@@ -18,7 +18,7 @@ const CourseEditPage = async ({ params }: PageProps) => {
 
   return (
     <div>
-      <EditForm user={user} course={course} />
+      <EditForm user={user ? { ...user, userId: user.id } : null} course={course} />
     </div>
   );
 };

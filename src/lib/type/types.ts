@@ -93,3 +93,14 @@ export type SocialLink = {
   href: string;
   icon: IconType;
 };
+
+export interface GetCoursesResponse {
+  success: boolean;
+  message: string;
+  data: Course[];
+}
+export interface GetSingleCourseResponse {
+  success: boolean;
+  message: string;
+  data: Course;
+}

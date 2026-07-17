@@ -1,10 +1,14 @@
 import { serverFetch } from "../core/server";
 import {
   Course,
-  GetCoursesParams,
   GetCoursesResponse,
   GetSingleCourseResponse,
 } from "../type/types";
+
+type GetCoursesParams = {
+  category?: string;
+  search?: string;
+};
 
 export const getCourses = async ({
   category,

@@ -6,7 +6,7 @@ const AddCoursePage = async () => {
   console.log(user);
   return (
     <div>
-      <CourseCreateForm user={user} />
+      <CourseCreateForm user={user ? { ...user, userId: user.id } : null} />
     </div>
   );
 };

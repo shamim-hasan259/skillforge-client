@@ -15,9 +15,9 @@ type User = Session["user"];
 const navItems: NavItem[] = [
   { name: "Home", href: "/" },
   { name: "Courses", href: "/courses" },
-  { name: "Roadmaps", href: "/roadmaps" },
-  { name: "Community", href: "/community" },
   { name: "About", href: "/about" },
+  { name: "Blogs", href: "/blogs" },
+  { name: "Contact", href: "/contact" },
 ];
 
 export default function Navbar() {
@@ -167,7 +167,6 @@ export default function Navbar() {
 
             <hr className="border-gray-100 dark:border-slate-900 my-1" />
 
-            {/* Mobile Auth & Links */}
             {user ? (
               <div className="flex flex-col space-y-2 pt-2">
                 <div className="flex items-center gap-3 px-3 py-1">
@@ -188,13 +187,6 @@ export default function Navbar() {
                   </div>
                 </div>
 
-                <Link
-                  href="/profile"
-                  onClick={() => setIsOpen(false)}
-                  className="rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-slate-300 dark:hover:bg-slate-900 transition"
-                >
-                  Profile
-                </Link>
                 <Link
                   href="/dashboard"
                   onClick={() => setIsOpen(false)}
